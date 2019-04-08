@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
 import android.graphics.Paint.Style;
-import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -18,7 +17,6 @@ import android.view.View;
 public class CustomView extends View {
 
   private Paint mPaint;
-  private Point mPoint;
   private FontMetrics mFontMetrics;
 
   public CustomView(Context context) {
@@ -41,11 +39,11 @@ public class CustomView extends View {
     mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     mPaint.setTextSize(sp2px(15));
     mFontMetrics = new FontMetrics();
-    mPoint = new Point();
-    int[] location = new int[2];
-    getLocationOnScreen(location);
-    mPoint.x = location[0];
-    mPoint.y = location[1];
+  }
+
+  @Override
+  protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    super.onLayout(changed, left, top, right, bottom);
   }
 
   @Override
@@ -56,16 +54,16 @@ public class CustomView extends View {
     int width = getWidth();
     int height = getHeight();
     int r = Math.min(width, height) / 2 - 10;
-    float centerX = mPoint.x + width / 2;
-    float centerY = mPoint.y + height / 2;
+    float centerX = width / 2;
+    float centerY = height / 2;
     //
     canvas.drawCircle(centerX, centerY, r, mPaint);
     //
     mPaint.setColor(Color.RED);
-    canvas.drawLine(mPoint.x + width / 2, mPoint.y + height / 2 - r, mPoint.x + width / 2,
-        mPoint.y + height / 2 + r, mPaint);
-    canvas.drawLine(mPoint.x + width / 2 - r, mPoint.y + height / 2, mPoint.x + width / 2 + r,
-        mPoint.y + height / 2, mPaint);
+    canvas.drawLine(width / 2, height / 2 - r, width / 2,
+        +height / 2 + r, mPaint);
+    canvas.drawLine(+width / 2 - r, height / 2, width / 2 + r,
+        height / 2, mPaint);
     //
     mPaint.setColor(Color.WHITE);
     mPaint.setStyle(Style.FILL);
